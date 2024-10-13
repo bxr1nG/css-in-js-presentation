@@ -1,0 +1,35 @@
+$breakpoints: (
+  "mobile": 480px,
+  "tablet": 768px,
+  "desktop": 1024px,
+  "large-desktop": 1200px,
+);
+
+.container {
+  @each $device, $max-width in $breakpoints {
+    @media (max-width: #{$max-width}) {
+      @if $device == "mobile" {
+        max-width: 100%;
+        padding: 0 10px;
+      } @else if $device == "tablet" {
+        max-width: 720px;
+      } @else if $device == "desktop" {
+        max-width: 960px;
+      } @else if $device == "large-desktop" {
+        max-width: 1140px;
+      }
+    }
+  }
+}
+
+.anime-box {
+  @media (max-width: #{map-get($breakpoints, mobile)}) {
+    flex-direction: column;
+  }
+
+  .poster-box {
+    @media (max-width: #{map-get($breakpoints, mobile)}) {
+      width: 100%;
+    }
+  }
+}
