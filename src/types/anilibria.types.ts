@@ -117,7 +117,7 @@ export type Season = {
 
 export type Status = {
   string: string;
-  code: number;
+  code: 1 | 2 | 3 | 4;
 };
 
 export type Team = {

@@ -1,7 +1,15 @@
 import { FC } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import {
+  Container,
+  Box,
+  AppBar,
+  Toolbar,
+  CircularProgress,
+  Link,
+} from "@mui/material";
 import { useTitle, WEB_URL } from "../queries";
-import { RandomButton, Container, StatusBar } from "../components";
+import { RandomButton, StatusBar } from "../components";
 
 export const Anime: FC = () => {
   const { id } = useParams();
@@ -9,42 +17,60 @@ export const Anime: FC = () => {
   const { isLoading, data: anime } = useTitle(id || "");
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return (
+      <CircularProgress
+        sx={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%,-50%)",
+        }}
+      />
+    );
   }
 
   return (
-    <Container>
-      <header>
-        <img
-          css={{
-            height: "40px",
-            cursor: "pointer",
-            marginRight: "auto",
-          }}
-          alt="logo"
-          src="/icon.webp"
-          onClick={() => navigate("/")}
-        />
-        <RandomButton />
-      </header>
-
-      <div
-        css={{
+    <Box>
+      <AppBar position="sticky" color="transparent">
+        <Toolbar sx={{ gap: 2 }}>
+          <Box
+            component="img"
+            sx={{
+              height: "40px",
+              cursor: "pointer",
+              marginRight: "auto",
+            }}
+            alt="logo"
+            src="/icon.webp"
+            onClick={() => navigate("/")}
+          />
+          <RandomButton />
+        </Toolbar>
+      </AppBar>
+      <Container
+        sx={{
           display: "flex",
-          gap: "15px",
+          gap: 2,
+          py: 2,
           alignItems: "flex-start",
-          "@media (max-width: 480px)": { flexDirection: "column" },
+          flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <div
-          css={{
+        <Box
+          sx={{
             flex: 1,
             position: "relative",
-            "@media (max-width: 480px)": { width: "100%" },
-            img: { width: "100%", height: "auto" },
+            width: { xs: "100%", md: "auto" },
+            borderRadius: 4,
+            overflow: "hidden",
           }}
         >
-          <img
+          <Box
+            component="img"
+            sx={{
+              width: "100%",
+              height: "auto",
+            }}
             alt={anime?.names.ru}
             src={`${WEB_URL}${anime?.posters.medium.url}`}
           />
@@ -53,20 +79,13 @@ export const Anime: FC = () => {
               {anime?.status.string}
             </StatusBar>
           )}
-        </div>
+        </Box>
 
-        <div
-          css={{
+        <Box
+          sx={{
             flex: 2,
             h3: { margin: "0", textAlign: "center" },
             h4: { margin: "0", paddingBottom: "4px" },
-            a: {
-              display: "block",
-              color: "#457cce",
-              textDecoration: "underline",
-              cursor: "pointer",
-              "&:hover": { color: "#3864a8", textDecoration: "none" },
-            },
           }}
         >
           <h3>{anime?.names.ru}</h3>
@@ -87,18 +106,22 @@ export const Anime: FC = () => {
                 release.id === +(id || 0) ? (
                   <div key={release.id}>{release.names.ru}</div>
                 ) : (
-                  <a
-                    onClick={() => navigate(`/anime/${release.id}`)}
+                  <Link
                     key={release.id}
+                    sx={{
+                      display: "block",
+                    }}
+                    as={RouterLink}
+                    to={`/anime/${release.id}`}
                   >
                     {release.names.ru}
-                  </a>
+                  </Link>
                 ),
               )}
             </div>
           ))}
-        </div>
-      </div>
-    </Container>
+        </Box>
+      </Container>
+    </Box>
   );
 };

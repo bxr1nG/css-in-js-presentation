@@ -1,11 +1,30 @@
 import { FC, useMemo, useState } from "react";
-import { debounce } from "lodash";
+import {
+  Container,
+  Box,
+  AppBar,
+  Toolbar,
+  TextField,
+  CircularProgress,
+  debounce,
+  IconButton,
+  CardMedia,
+  CardContent,
+  Typography,
+  Card,
+  CardActionArea,
+  Badge,
+} from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import ClearIcon from "@mui/icons-material/Clear";
 import { useTitleSearch, WEB_URL } from "../queries";
 import { useNavigate } from "react-router-dom";
-import { RandomButton, Container, AnimeGridItem, Chip } from "../components";
+import { RandomButton, StatusChip } from "../components";
 import { Anilibria, AnilibriaList } from "../types";
+import { LoadingButton } from "@mui/lab";
 
 export const Search: FC = () => {
+  const [internalSearch, setInternalSearch] = useState("");
   const [search, setSearch] = useState("");
   const { isFetching, data, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useTitleSearch(search);
@@ -17,65 +36,118 @@ export const Search: FC = () => {
     }, []) as AnilibriaList[];
   }, [data]);
 
-  const handleChange = debounce(setSearch, 1000);
+  const handleChange = useMemo(() => debounce(setSearch, 1000), [setSearch]);
 
   return (
-    <Container>
-      <header>
-        <input
-          css={{
-            padding: "10px",
-            fontSize: "16px",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            width: "100%",
-          }}
-          placeholder="Введите название"
-          onChange={(e) => handleChange(e.target.value)}
-        />
+    <Box>
+      <AppBar position="sticky" color="transparent">
+        <Toolbar sx={{ gap: 2 }}>
+          <TextField
+            value={internalSearch}
+            fullWidth
+            size="small"
+            placeholder="Введите название"
+            onChange={(e) => {
+              setInternalSearch(e.target.value);
+              handleChange(e.target.value);
+            }}
+            slotProps={{
+              input: {
+                endAdornment: isFetching ? (
+                  <CircularProgress size={20} />
+                ) : (
+                  internalSearch && (
+                    <IconButton
+                      onClick={() => {
+                        setInternalSearch("");
+                        setSearch("");
+                      }}
+                      edge="end"
+                      size="small"
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  )
+                ),
+              },
+            }}
+          />
 
-        {isFetching && <div css={{ alignSelf: "center" }}>Загрузка...</div>}
-        <RandomButton />
-      </header>
+          <RandomButton />
+        </Toolbar>
+      </AppBar>
 
-      <main
-        css={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: 15,
-        }}
+      <Container
+        sx={{ display: "flex", flexDirection: "column", gap: 2, py: 2 }}
       >
-        {list.map((item) => (
-          <AnimeGridItem
-            key={item.id}
-            onClick={() => navigate(`/anime/${item.id}`)}
+        <Grid container spacing={2}>
+          {list.map((item) => (
+            <Grid
+              key={item.id}
+              item
+              size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
+            >
+              <Badge
+                badgeContent={item.in_favorites}
+                color="primary"
+                max={NaN}
+                sx={{
+                  height: "100%",
+                  "& .MuiBadge-badge": {
+                    transform: "translate(-25%, +25%)",
+                  },
+                }}
+              >
+                <Card sx={{ height: "100%" }}>
+                  <StatusChip
+                    label={item.status.string}
+                    status={item.status.code}
+                  />
+                  <CardActionArea
+                    onClick={() => navigate(`/anime/${item.id}`)}
+                    sx={{ height: "100%" }}
+                  >
+                    <CardMedia
+                      component="img"
+                      image={`${WEB_URL}${item.posters.small.url}`}
+                      sx={{
+                        objectFit: "contain",
+                      }}
+                    />
+                    <CardContent sx={{ height: "100%" }}>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {item.names.ru}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "text.secondary" }}
+                      >
+                        {item.type.full_string}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Badge>
+            </Grid>
+          ))}
+        </Grid>
+
+        {((isFetching && isFetchingNextPage) || (!search && !isFetching)) && (
+          <LoadingButton
+            sx={{ alignSelf: "center" }}
+            variant="contained"
+            onClick={() => fetchNextPage()}
+            loading={isFetchingNextPage}
+            disabled={!hasNextPage || isFetchingNextPage}
           >
-            <img
-              alt={item.names.ru}
-              src={`${WEB_URL}${item.posters.small.url}`}
-            />
-            <h3>{item.names.ru}</h3>
-            <p>{item.type.full_string}</p>
-
-            <Chip position={{ x: "right" }}>{item.in_favorites}</Chip>
-            <Chip>{item.status.string}</Chip>
-          </AnimeGridItem>
-        ))}
-      </main>
-
-      {((isFetching && isFetchingNextPage) || (!search && !isFetching)) && (
-        <button
-          css={{ marginTop: 20, padding: "5px 10px", alignSelf: "center" }}
-          onClick={() => fetchNextPage()}
-          disabled={!hasNextPage || isFetchingNextPage}
-        >
-          {isFetchingNextPage
-            ? "Загрузка..."
-            : hasNextPage
-              ? "Загрузить еще"
-              : "Нечего грузить"}
-        </button>
-      )}
-    </Container>
+            {isFetchingNextPage
+              ? "Загрузка..."
+              : hasNextPage
+                ? "Загрузить еще"
+                : "Нечего грузить"}
+          </LoadingButton>
+        )}
+      </Container>
+    </Box>
   );
 };

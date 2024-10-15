@@ -1,10 +1,18 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Global, Theme, ThemeProvider } from "@emotion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createTheme,
+  CssBaseline,
+  GlobalStyles,
+  ThemeProvider,
+} from "@mui/material";
 import { Search, Anime } from "./pages";
-import "./styles/normalize.scss";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 const queryClient = new QueryClient();
 
@@ -19,38 +27,36 @@ const router = createBrowserRouter([
   },
 ]);
 
-const theme: Theme = {
-  colors: {
-    primary: "#457cce",
+const theme = createTheme({
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        colorTransparent: {
+          backgroundColor: "white",
+        },
+      },
+    },
   },
-};
+  shadows: Array(25).fill("none"),
+  palette: {
+    primary: {
+      main: "#457cce",
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-        <Global
-          styles={(theme) => ({
-            button: {
-              backgroundColor: theme.colors.primary,
-              border: "none",
-              borderRadius: 4,
-              color: "#fff",
-              cursor: "pointer",
-            },
+        <CssBaseline />
+        <GlobalStyles
+          styles={{
             body: {
               backgroundColor: "#f3f3f3",
             },
-            "*, *::before, *::after": {
-              boxSizing: "border-box" as never, // https://github.com/emotion-js/emotion/issues/3249
-            },
-            header: {
-              marginBottom: "20px",
-              display: "flex",
-              gap: "15px",
-            },
-          })}
+          }}
         />
       </QueryClientProvider>
     </ThemeProvider>
