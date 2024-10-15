@@ -111,7 +111,7 @@ export const Anime: FC = () => {
                     sx={{
                       display: "block",
                     }}
-                    as={RouterLink}
+                    component={RouterLink}
                     to={`/anime/${release.id}`}
                   >
                     {release.names.ru}
