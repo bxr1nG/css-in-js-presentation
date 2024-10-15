@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTitle, WEB_URL } from "../queries";
-import { RandomButton } from "../components";
+import { RandomButton, Container, StatusBar } from "../components";
 
 export const Anime: FC = () => {
   const { id } = useParams();
@@ -13,10 +13,14 @@ export const Anime: FC = () => {
   }
 
   return (
-    <div className="container">
+    <Container>
       <header>
         <img
-          className="icon"
+          css={{
+            height: "40px",
+            cursor: "pointer",
+            marginRight: "auto",
+          }}
           alt="logo"
           src="/icon.webp"
           onClick={() => navigate("/")}
@@ -24,18 +28,47 @@ export const Anime: FC = () => {
         <RandomButton />
       </header>
 
-      <div className="anime-box">
-        <div className="poster-box">
+      <div
+        css={{
+          display: "flex",
+          gap: "15px",
+          alignItems: "flex-start",
+          "@media (max-width: 480px)": { flexDirection: "column" },
+        }}
+      >
+        <div
+          css={{
+            flex: 1,
+            position: "relative",
+            "@media (max-width: 480px)": { width: "100%" },
+            img: { width: "100%", height: "auto" },
+          }}
+        >
           <img
             alt={anime?.names.ru}
             src={`${WEB_URL}${anime?.posters.medium.url}`}
           />
-          <div className={`status${anime?.status.code}`}>
-            {anime?.status.string}
-          </div>
+          {anime?.status.code && (
+            <StatusBar status={anime.status.code}>
+              {anime?.status.string}
+            </StatusBar>
+          )}
         </div>
 
-        <div className="description-box">
+        <div
+          css={{
+            flex: 2,
+            h3: { margin: "0", textAlign: "center" },
+            h4: { margin: "0", paddingBottom: "4px" },
+            a: {
+              display: "block",
+              color: "#457cce",
+              textDecoration: "underline",
+              cursor: "pointer",
+              "&:hover": { color: "#3864a8", textDecoration: "none" },
+            },
+          }}
+        >
           <h3>{anime?.names.ru}</h3>
 
           <p>
@@ -47,11 +80,11 @@ export const Anime: FC = () => {
           <p>{anime?.description}</p>
 
           {anime?.franchises.map((franchise) => (
-            <div>
+            <div id={franchise.franchise.id}>
               <h4>{franchise.franchise.name}</h4>
 
               {franchise.releases.map((release) =>
-                release.id === +id ? (
+                release.id === +(id || 0) ? (
                   <div key={release.id}>{release.names.ru}</div>
                 ) : (
                   <a
@@ -66,6 +99,6 @@ export const Anime: FC = () => {
           ))}
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
