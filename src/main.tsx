@@ -6,6 +6,7 @@ import {
   createTheme,
   CssBaseline,
   GlobalStyles,
+  StyledEngineProvider,
   ThemeProvider,
 } from "@mui/material";
 import { Search, Anime } from "./pages";
@@ -13,6 +14,10 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import "./main.css";
+
+const rootElement = document.getElementById("root");
+const root = createRoot(rootElement);
 
 const queryClient = new QueryClient();
 
@@ -36,6 +41,26 @@ const theme = createTheme({
         },
       },
     },
+    MuiPopover: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
+    MuiPopper: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
+    MuiDialog: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
+    MuiModal: {
+      defaultProps: {
+        container: rootElement,
+      },
+    },
   },
   shadows: Array(25).fill("none"),
   palette: {
@@ -45,12 +70,10 @@ const theme = createTheme({
   },
 });
 
-createRoot(document.getElementById("root")!).render(
+root.render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <CssBaseline />
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
         <GlobalStyles
           styles={{
             body: {
@@ -58,7 +81,11 @@ createRoot(document.getElementById("root")!).render(
             },
           }}
         />
-      </QueryClientProvider>
-    </ThemeProvider>
+        <CssBaseline />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </StyledEngineProvider>
   </StrictMode>,
 );

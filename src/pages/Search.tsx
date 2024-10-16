@@ -78,7 +78,8 @@ export const Search: FC = () => {
       </AppBar>
 
       <Container
-        sx={{ display: "flex", flexDirection: "column", gap: 2, py: 2 }}
+        // sx={{ display: "flex", flexDirection: "column", gap: 2, py: 2 }}
+        className="flex flex-col gap-4 py-4"
       >
         <Grid container spacing={2}>
           {list.map((item) => (
@@ -92,20 +93,21 @@ export const Search: FC = () => {
                 color="primary"
                 max={NaN}
                 sx={{
-                  height: "100%",
+                  // height: "100%",
                   "& .MuiBadge-badge": {
                     transform: "translate(-25%, +25%)",
                   },
                 }}
+                className="h-full"
               >
-                <Card sx={{ height: "100%" }}>
+                <Card className="h-full">
                   <StatusChip
                     label={item.status.string}
                     status={item.status.code}
                   />
                   <CardActionArea
                     onClick={() => navigate(`/anime/${item.id}`)}
-                    sx={{ height: "100%" }}
+                    className="h-full"
                   >
                     <CardMedia
                       component="img"

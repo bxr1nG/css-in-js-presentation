@@ -35,42 +35,46 @@ export const Anime: FC = () => {
         <Toolbar sx={{ gap: 2 }}>
           <Box
             component="img"
-            sx={{
-              height: "40px",
-              cursor: "pointer",
-              marginRight: "auto",
-            }}
+            // sx={{
+            //   height: "40px",
+            //   cursor: "pointer",
+            //   marginRight: "auto",
+            // }}
             alt="logo"
             src="/icon.webp"
             onClick={() => navigate("/")}
+            className="h-[40px] cursor-pointer mr-auto"
           />
           <RandomButton />
         </Toolbar>
       </AppBar>
       <Container
-        sx={{
-          display: "flex",
-          gap: 2,
-          py: 2,
-          alignItems: "flex-start",
-          flexDirection: { xs: "column", md: "row" },
-        }}
+        // sx={{
+        //   display: "flex",
+        //   gap: 2,
+        //   py: 2,
+        //   alignItems: "flex-start",
+        //   flexDirection: { xs: "column", md: "row" },
+        // }}
+        className="flex gap-4 py-4 items-start flex-col md:flex-row"
       >
         <Box
-          sx={{
-            flex: 1,
-            position: "relative",
-            width: { xs: "100%", md: "auto" },
-            borderRadius: 4,
-            overflow: "hidden",
-          }}
+          // sx={{
+          //   flex: 1,
+          //   position: "relative",
+          //   width: { xs: "100%", md: "auto" },
+          //   borderRadius: 4,
+          //   overflow: "hidden",
+          // }}
+          className="flex-1 relative rounded overflow-hidden w-full md:w-auto"
         >
           <Box
             component="img"
-            sx={{
-              width: "100%",
-              height: "auto",
-            }}
+            // sx={{
+            //   width: "100%",
+            //   height: "auto",
+            // }}
+            className="w-full h-auto"
             alt={anime?.names.ru}
             src={`${WEB_URL}${anime?.posters.medium.url}`}
           />
@@ -83,10 +87,11 @@ export const Anime: FC = () => {
 
         <Box
           sx={{
-            flex: 2,
+            // flex: 2,
             h3: { margin: "0", textAlign: "center" },
             h4: { margin: "0", paddingBottom: "4px" },
           }}
+          className="flex-[2_2_0%]"
         >
           <h3>{anime?.names.ru}</h3>
 
