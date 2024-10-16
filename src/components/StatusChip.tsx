@@ -1,4 +1,4 @@
-import { styled } from "@mui/material/styles";
+import { styled } from "@mui/material-pigment-css";
 import { Chip, ChipProps } from "@mui/material";
 
 type StatusChipProps = ChipProps & {
@@ -12,13 +12,11 @@ const statusColors = [
   "rgba(156, 69, 206)",
 ];
 
-export const StatusChip = styled(Chip)<StatusChipProps>(
-  ({ status }: StatusChipProps) => ({
-    position: "absolute",
-    zIndex: 1,
-    top: 5,
-    left: 5,
-    color: "#fff",
-    backgroundColor: statusColors[status - 1],
-  }),
-);
+export const StatusChip = styled(Chip)<StatusChipProps>({
+  position: "absolute",
+  zIndex: 1,
+  top: 5,
+  left: 5,
+  color: "#fff",
+  // backgroundColor: statusColors[status - 1]
+});

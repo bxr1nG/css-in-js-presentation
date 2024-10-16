@@ -1,7 +1,5 @@
 import { FC, useMemo, useState } from "react";
 import {
-  Container,
-  Box,
   AppBar,
   Toolbar,
   TextField,
@@ -15,6 +13,8 @@ import {
   CardActionArea,
   Badge,
 } from "@mui/material";
+import Container from "@mui/material-pigment-css/Container";
+import Box from "@mui/material-pigment-css/Box";
 import Grid from "@mui/material/Grid2";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useTitleSearch, WEB_URL } from "../queries";
@@ -40,7 +40,11 @@ export const Search: FC = () => {
 
   return (
     <Box>
-      <AppBar position="sticky" color="transparent">
+      <AppBar
+        position="sticky"
+        color="transparent"
+        sx={{ backgroundColor: "#fff" }}
+      >
         <Toolbar sx={{ gap: 2 }}>
           <TextField
             value={internalSearch}

@@ -1,5 +1,5 @@
 import { Box, BoxProps } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { styled } from "@mui/material-pigment-css";
 
 type StatusBarProps = BoxProps & {
   status: 1 | 2 | 3 | 4;

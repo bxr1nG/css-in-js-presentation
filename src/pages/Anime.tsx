@@ -1,13 +1,8 @@
 import { FC } from "react";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
-import {
-  Container,
-  Box,
-  AppBar,
-  Toolbar,
-  CircularProgress,
-  Link,
-} from "@mui/material";
+import { AppBar, Toolbar, CircularProgress, Link } from "@mui/material";
+import Container from "@mui/material-pigment-css/Container";
+import Box from "@mui/material-pigment-css/Box";
 import { useTitle, WEB_URL } from "../queries";
 import { RandomButton, StatusBar } from "../components";
 
@@ -81,7 +76,7 @@ export const Anime: FC = () => {
           )}
         </Box>
 
-        <Box
+        <div
           sx={{
             flex: 2,
             h3: { margin: "0", textAlign: "center" },
@@ -120,7 +115,7 @@ export const Anime: FC = () => {
               )}
             </div>
           ))}
-        </Box>
+        </div>
       </Container>
     </Box>
   );
